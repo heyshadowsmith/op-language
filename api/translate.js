@@ -10,12 +10,12 @@ module.exports = (req, res) => {
         if (opedLetters.includes(letterToMatch)) return letter + 'op'
 
         if (spokenLetters.includes(letterToMatch)) {
-            if (letterToMatch === 'A') return 'ay'
-            if (letterToMatch === 'E') return 'ee'
-            if (letterToMatch === 'I') return 'eye'
-            if (letterToMatch === 'O') return 'ow'
-            if (letterToMatch === 'U') return 'you'
-            if (letterToMatch === 'X') return 'ex'
+            if (letterToMatch === 'A') return letter === 'A' ? 'Ay' : 'ay'
+            if (letterToMatch === 'E') return letter === 'E' ? 'Ee' : 'ee'
+            if (letterToMatch === 'I') return letter === 'I' ? 'Eye' : 'eye'
+            if (letterToMatch === 'O') return letter === 'O' ? 'Ow' : 'ow'
+            if (letterToMatch === 'U') return letter === 'U' ? 'You' : 'you'
+            if (letterToMatch === 'X') return letter === 'X' ? 'Ex' : 'ex'
         }
 
         return letter
