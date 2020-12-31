@@ -4,13 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Op Language Translator</title>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
 </head>
-<body>
-    <div id="app">
-        <input type="text" v-model="input">
-        <button @click="translate">Translate</button>
-        {{ output }}
+<body class="bg-gray-100 h-screen p-12">
+    <div 
+        id="app" 
+        class="w-full h-full"
+    >
+        <div class="mb-10">
+            <h1 class="text-4xl font-semibold mb-1 text-gray-800">Op Language Translator</h1>
+            <p class="text-gray-500">
+                A silly nostalgic tool created by 
+                <a
+                    class="underline"
+                    href="https://shadowsmith.com">
+                    Shadow Smith
+                </a>
+            </p>
+        </div>
+        <div class="w-full bg-white p-6 border border-gray-200 shadow-lg rounded-lg flex flex-col">
+            <textarea 
+                class="bg-gray-100 p-3 rounded-lg"
+                placeholder="Type here..."
+                v-model="input" 
+                @keyup="translate">
+            </textarea>
+            <div v-if="output" class="p-3 border-4 border-gray-100 rounded-lg mt-6">
+                {{ output }}
+            </div>
+        </div>
     </div>
     <script>
         new Vue({
@@ -20,16 +43,30 @@
                 output: ''
             },
             methods: {
-                async translate () {
-                    let response = await fetch('/api/translate', {
-                        method: 'POST',
-                        body: this.input
+                translate () {
+                    const input = this.input.split('')
+
+                    const opedLetters = ['B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'Y', 'Z']
+                    const spokenLetters = ['A', 'E', 'I', 'O', 'U', 'X']
+
+                    const outputArray = input.map(letter => {
+                        const letterToMatch = letter.toUpperCase()
+
+                        if (opedLetters.includes(letterToMatch)) return letter + 'op'
+
+                        if (spokenLetters.includes(letterToMatch)) {
+                            if (letterToMatch === 'A') return letter === 'A' ? 'Ay' : 'ay'
+                            if (letterToMatch === 'E') return letter === 'E' ? 'Ee' : 'ee'
+                            if (letterToMatch === 'I') return letter === 'I' ? 'Eye' : 'eye'
+                            if (letterToMatch === 'O') return letter === 'O' ? 'Ow' : 'ow'
+                            if (letterToMatch === 'U') return letter === 'U' ? 'You' : 'you'
+                            if (letterToMatch === 'X') return letter === 'X' ? 'Ex' : 'ex'
+                        }
+
+                        return letter
                     })
 
-                    response = await response.json() 
-
-                    this.output = response.data
-                    this.input = ''
+                    this.output = outputArray.join('')
                 }
             }
         })
