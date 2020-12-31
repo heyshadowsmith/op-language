@@ -25,22 +25,46 @@
         </div>
         <div class="w-full bg-white p-6 border border-gray-200 shadow-lg rounded-lg flex flex-col">
             <textarea 
+                v-if="!hideInput"
                 class="bg-gray-100 p-3 rounded-lg"
                 placeholder="Type here..."
                 v-model="input" 
                 @keyup="translate">
             </textarea>
-            <div v-if="output" class="p-3 border-4 border-gray-100 rounded-lg mt-6">
+            <div 
+                v-if="output" 
+                class="p-3 border-4 border-gray-100 rounded-lg"
+                :class="{ 'mt-6': !hideInput }"
+            >
                 {{ output }}
             </div>
         </div>
     </div>
     <script>
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+
         new Vue({
             el: '#app',
             data: {
                 input: '',
-                output: ''
+                output: '',
+                hideInput: false
+            },
+            mounted () {
+                const inputParameter = getUrlParameter('input')
+                const hideParameter = getUrlParameter('hide')
+
+                if (inputParameter) {
+                    this.input = inputParameter
+                    this.translate()
+                }
+
+                if (hideParameter) this.hideInput = hideParameter
             },
             methods: {
                 translate () {
