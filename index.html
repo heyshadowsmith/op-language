@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Op Language Translator</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <input type="text" v-model="input">
+        <button @click="translate">Translate</button>
+        {{ output }}
+    </div>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                input: '',
+                output: ''
+            },
+            methods: {
+                async translate () {
+                    let response = await fetch('/api/translate', {
+                        method: 'POST',
+                        body: this.input
+                    })
+
+                    response = await response.json() 
+
+                    this.output = response.data
+                    this.input = ''
+                }
+            }
+        })
+    </script>
+</body>
+</html>
